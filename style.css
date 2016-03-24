@@ -1,0 +1,31 @@
+body {
+	background-color: #f2f2f2;
+}
+#placeholder {
+	width: 100%;
+	padding-left: 10%;
+	padding-right: 10%;
+
+}
+
+.title {
+	background-color: #3399ff;
+	width: 80%;
+	height : 10%;
+    border-radius: 25px;
+    padding: 40px 20px 40px 70px;
+    font-family: arial;
+    font-size: 20px;
+    margin-bottom: 50px;
+	
+}
+
+.app__list__list-item{
+	background-color: #3399ff;
+	border: 1px solid #ccc;
+	margin-bottom: 20px;
+	padding: 20px;
+	border-radius: 25px;
+	font-family: arial;
+	font-size: 20px;
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE <!DOCTYPE html>
+
+<html>
+
+        <head>
+
+            <title>Mathew</title>
+            <link rel="stylesheet" type="text/css" href="style.css">
+
+        </head>
+
+
+        <body>
+
+            <script src="jquery.js"></script>
+            <!-- <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+<!--             <script src="javascript"></script> -->
+                
+            <div class="placeholder"></div>
+
+            <script>
+
+
+        'use strict';
+
+        // console.log($);
+
+        var parent = document.querySelector('.placeholder');
+        var store = [];
+        var list = [];
+        var ListItem = function() {
+        	this.ele = document.createElement('div');
+        	this.baseCls = 'app__list__list-item';
+        	this.domRefs = {
+	        	firstName: null,
+	        	lastName: null,
+	        	title: null,
+	        	time: null,
+	        	comment: null
+        	};
+        	this.record;
+
+        	this.init();
+        };
+
+        ListItem.prototype.setTime = function(time) {
+        	this.record.set('time', time);
+        	this.domRefs.time.innerHTML = time;
+        };
+
+        ListItem.prototype.init = function() {
+        	this.ele.className = 'app__list__list-item';
+        	this.initDomRefs();
+        };
+
+
+        ListItem.prototype.initDomRefs = function() {
+        	var frag = document.createDocumentFragment();
+        	for(var i in this.domRefs) {
+        		this.domRefs[i] = this.makeRefDom(this.baseCls + '--' + i);
+        		frag.appendChild(this.domRefs[i]);
+        	}
+        	this.ele.appendChild(frag);
+        };
+
+        ListItem.prototype.setRecord = function(r) {
+        	this.record = r;
+        	this.updateRecord(r);
+        };
+
+        ListItem.prototype.onDataAdded = function(data) {
+        	for(var i in data) {
+        		if(!this.domRefs[i]) {
+        			this.addDomToRefs(i, data);
+        		}
+        	}
+        };
+
+        ListItem.prototype.makeRefDom = function(cls) {
+        	var dom = document.createElement('div');
+        	dom.className = cls;
+        	return dom;
+        };
+
+        ListItem.prototype.addDomToRefs = function(property, data) {
+        	this._data[property] = data;
+        	this.domRefs[property] = this.makeRefDom(this.baseCls + '--' + property);
+        	this.ele.appendChild(this.domRefs[property]);
+        };
+
+        ListItem.prototype.updateRecord = function(newRecord) {
+        	newRecord = newRecord || this.record;
+        	for(var i in this.domRefs) {
+        		if(newRecord.get(i)){
+        			this.domRefs[i].innerHTML = newRecord.get(i);
+        		}
+        	}
+        };
+
+        var Record = function(conf) {
+        	this._data = conf.data || {};
+        	this.joinedView;
+        	this.init();
+        };
+
+        Record.prototype.init = function() {
+
+        };
+
+        Record.prototype.joinView = function(view) {
+        	if(!view) return;
+        	this.joinedView = view;
+        };
+
+        Record.prototype.get = function(property) {
+        	return this._data[property] || null;
+        };
+
+        Record.prototype.set = function(property, data) {
+        	this._data[property] = data;
+        	this.joinedView.updateRecord(this);
+        };
+
+
+        $.getJSON('data.json', function(data) {
+        	var d, item, record,
+        		frag = document.createDocumentFragment();
+
+        	var t;
+
+        	data = data.users;
+        	
+        	for(var i in data) {
+        		d = data[i];
+        		record = new Record({ data: d })
+        		store.push(record);
+
+        		item = new ListItem();
+        		list.push(item);
+
+        		record.joinView(item);
+
+        		item.setRecord(record);
+        		frag.appendChild(item.ele);
+        		t = (new Date()).getTime();
+        		item.setTime(t);
+        	}
+        	parent.appendChild(frag);
+
+        	// console.log(store);
+        	// console.log(list);
+
+        	// setTimeout(function() {
+        	// 	store[1].addData('hobbie', 'football');
+        	// }, 2000);
+
+        // var output="";
+        // var now  = new Date ();
+        // var milliseconds = now.getMilliseconds();
+        // console.log(data);
+        // for (var i in data.users) {
+        //     output += '<div class="title">' + 
+        //     data.users[i].title + 
+        //     ' ' +
+        //     data.users[i].firstName + 
+        //     ' ' + 
+        //     data.users[i].lastName + 
+        //     '<br><br>' +
+        //     data.users[i].comment +
+        //     '<br><br>' +
+        //     data.users[i].blank +
+        //     '</div>';
+        // }
+
+        // output+="";
+       	// // console.log(output);
+       	// console.log(now);
+        // document.getElementById("placeholder").innerHTML=output;
+        // document.getElementsByClassName('time')[i].innerHTML = now;
+                    
+  		});
+            </script>           
+
+        </body>
+</html>
+
+
+<!-- 
+
+    var now     = new Date(); 
+    var year    = now.getFullYear();
+    var month   = now.getMonth()+1; 
+o    var hour    = now.getHours();
+    var minute  = now.getMinutes();
+    var second  = now.getSeconds(); 
+
+    -->
